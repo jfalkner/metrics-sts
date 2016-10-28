@@ -12,5 +12,5 @@ object Main extends App {
   if (args.last.endsWith("json"))
     JSON.write(Paths.get(args.last), Sts(Paths.get(args.head)))
   else if (args.last.endsWith("csv"))
-    CSV.write(Paths.get(args.last), Sts(Paths.get(args.head)))
+    CSV(Paths.get(args.last), Sts(Paths.get(args.head)))
 }

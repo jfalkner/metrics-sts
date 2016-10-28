@@ -2,6 +2,7 @@ package com.pacb.itg.metrics.sts
 
 import java.nio.file.Paths
 
+import falkner.jayson.metrics.io.CSV
 import falkner.jayson.metrics.{Num, NumArray}
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
@@ -20,21 +21,28 @@ class StsSpec extends Specification with TestData {
                      minOutlier: String, min: String, maxOutlier: String, max: String,
                      bins: Seq[Int]) : MatchResult[Any] = {
     val d = sts.asStsDist(name).metrics
-    d(0).asInstanceOf[Num].value() mustEqual samples
-    d(1).asInstanceOf[Num].value() mustEqual mean
-    d(2).asInstanceOf[Num].value() mustEqual median
-    d(3).asInstanceOf[Num].value() mustEqual stdDev
-    d(4).asInstanceOf[Num].value() mustEqual pct95
-    d(5).asInstanceOf[Num].value() mustEqual numBins
-    d(6).asInstanceOf[Num].value() mustEqual binWidth
-    d(7).asInstanceOf[Num].value() mustEqual minOutlier
-    d(8).asInstanceOf[Num].value() mustEqual min
-    d(9).asInstanceOf[Num].value() mustEqual maxOutlier
-    d(10).asInstanceOf[Num].value() mustEqual max
-    d(11).asInstanceOf[NumArray].values() mustEqual bins
+    d(0).asInstanceOf[Num].value mustEqual samples
+    d(1).asInstanceOf[Num].value mustEqual mean
+    d(2).asInstanceOf[Num].value mustEqual median
+    d(3).asInstanceOf[Num].value mustEqual stdDev
+    d(4).asInstanceOf[Num].value mustEqual pct95
+    d(5).asInstanceOf[Num].value mustEqual numBins
+    d(6).asInstanceOf[Num].value mustEqual binWidth
+    d(7).asInstanceOf[Num].value mustEqual minOutlier
+    d(8).asInstanceOf[Num].value mustEqual min
+    d(9).asInstanceOf[Num].value mustEqual maxOutlier
+    d(10).asInstanceOf[Num].value mustEqual max
+    d(11).asInstanceOf[NumArray].values mustEqual bins
   }
 
   "PipeStats checking" should {
+    "Current version calculates without error" in {
+      println(s"Current EOL QC Version: ${Sts.currentVersion}")
+      Sts.currentVersion != null mustEqual true
+    }
+    "Support blank CSV generation" in {
+      CSV(Sts.blank).all != null mustEqual true
+    }
     //"Load from sts.xml file" in (Sts(stsPath).pMovieName mustEqual pMovieName)
     "Load from movie directory" in (sts.asString("Movie Name") mustEqual pMovieName)
     "MovieLength" in (sts.asString("Movie Length") mustEqual "120")

@@ -20,15 +20,17 @@ object Sts_v3_0_1 {
 }
 
 class Sts_v3_0_1 (val p: Path, val xml: Node) extends Metrics {
+  override val namespace = "STS"
+  override val version = s"${Sts.version}~${Sts_v3_0_1.version}"
   override val values: List[Metric] = List(
     Str("Path", p.toAbsolutePath.toString),
-    Str("Movie Name", () => (xml \ "MovieName").text),
-    Num("Movie Length", () => (xml \ "MovieLength").text),
+    Str("Movie Name", (xml \ "MovieName").text),
+    Num("Movie Length", (xml \ "MovieLength").text),
     Num("Sequencing ZMWs", (xml \ "NumSequencingZmws").text),
-    Num("Total Base Fraction: A", () => totalBaseFractionPerChannel(xml, "A")),
-    Num("Total Base Fraction: C", () => totalBaseFractionPerChannel(xml, "C")),
-    Num("Total Base Fraction: G", () => totalBaseFractionPerChannel(xml, "G")),
-    Num("Total Base Fraction: T", () => totalBaseFractionPerChannel(xml, "T")),
+    Num("Total Base Fraction: A", totalBaseFractionPerChannel(xml, "A")),
+    Num("Total Base Fraction: C", totalBaseFractionPerChannel(xml, "C")),
+    Num("Total Base Fraction: G", totalBaseFractionPerChannel(xml, "G")),
+    Num("Total Base Fraction: T", totalBaseFractionPerChannel(xml, "T")),
     StsDist("Baseline level: A", (root) => (root \ "BaselineLevelDist").filter(n => (n \ "@Channel").text == "A").head),
     StsDist("Baseline level: C", (root) => (root \ "BaselineLevelDist").filter(n => (n \ "@Channel").text == "C").head),
     StsDist("Baseline level: G", (root) => (root \ "BaselineLevelDist").filter(n => (n \ "@Channel").text == "G").head),
@@ -53,10 +55,10 @@ class Sts_v3_0_1 (val p: Path, val xml: Node) extends Metrics {
     StsDist("Control Read Len", (root) => (root \ "ControlReadLenDist").head),
     StsDist("Control Read Len Qual", (root) => (root \ "ControlReadLenQual").head),
     CatDist("Productivity",
-      (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (0).text.toInt +
+      ((xml \ "ProdDist" \ "BinCounts" \ "BinCount") (0).text.toInt +
         (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (0).text.toInt +
         (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (2).text.toInt +
-        (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (3).text.toInt,
+        (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (3).text.toInt),
       Map(
         ("Empty" -> (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (0).text.toInt),
         ("Productive" -> (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (0).text.toInt),
@@ -101,18 +103,18 @@ class Sts_v3_0_1 (val p: Path, val xml: Node) extends Metrics {
 
   case class StsDist(name: String, node: (Node) => Node) extends Metric {
     val metrics: List[Metric] = List(
-      Num(s"$name: Samples", () => (node(xml) \ "SampleSize").text),
-      Num(s"$name: Mean", () => (node(xml) \ "SampleMean").text),
-      Num(s"$name: Median", () => (node(xml) \ "SampleMed").text),
-      Num(s"$name: StdDev", () => (node(xml) \ "SampleStd").text),
-      Num(s"$name: 95th Pct", () => (node(xml) \ "Sample95thPct").text),
-      Num(s"$name: Num Bins", () => (node(xml) \ "NumBins").text),
-      Num(s"$name: Bin Width", () => (node(xml) \ "BinWidth").text),
-      Num(s"$name: Min Outlier", () => (node(xml) \ "MinOutlierValue").text),
-      Num(s"$name: Min", () => (node(xml) \ "MinBinValue").text),
-      Num(s"$name: Max Outlier", () => (node(xml) \ "MaxOutlierValue").text),
-      Num(s"$name: Max", () => (node(xml) \ "MaxBinValue").text),
-      NumArray(s"$name: Bins", () => (node(xml) \ "BinCounts" \ "BinCount").map(_.text.toInt))
+      Num(s"$name: Samples", (node(xml) \ "SampleSize").text),
+      Num(s"$name: Mean", (node(xml) \ "SampleMean").text),
+      Num(s"$name: Median", (node(xml) \ "SampleMed").text),
+      Num(s"$name: StdDev", (node(xml) \ "SampleStd").text),
+      Num(s"$name: 95th Pct", (node(xml) \ "Sample95thPct").text),
+      Num(s"$name: Num Bins", (node(xml) \ "NumBins").text),
+      Num(s"$name: Bin Width", (node(xml) \ "BinWidth").text),
+      Num(s"$name: Min Outlier", (node(xml) \ "MinOutlierValue").text),
+      Num(s"$name: Min", (node(xml) \ "MinBinValue").text),
+      Num(s"$name: Max Outlier", (node(xml) \ "MaxOutlierValue").text),
+      Num(s"$name: Max", (node(xml) \ "MaxBinValue").text),
+      NumArray(s"$name: Bins", (node(xml) \ "BinCounts" \ "BinCount").map(_.text.toInt))
     )
   }
 
