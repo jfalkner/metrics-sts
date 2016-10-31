@@ -2,7 +2,7 @@ package com.pacb.itg.metrics.sts
 
 import java.nio.file.Path
 
-import falkner.jayson.metrics._
+import falkner.jayson.metrics.{CatDist, _}
 
 import scala.collection.immutable.ListMap
 import scala.xml.{Elem, Node, XML}
@@ -60,15 +60,15 @@ class Sts_v3_0_1 (val p: Path, val xml: Node) extends Metrics {
         (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (0).text.toInt +
         (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (2).text.toInt +
         (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (3).text.toInt),
-      ListMap(
+      Map(
         ("Empty" -> (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (0).text.toInt),
         ("Productive" -> (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (1).text.toInt),
         ("Other" -> (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (2).text.toInt),
         ("Undefined" -> (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (3).text.toInt)
-      )),
+      ), List("Empty", "Productive", "Other", "Undefined")),
     CatDist("Read Type",
       (xml \ "ReadTypeDist" \ "BinCounts" \ "BinCount").map(_.text.toInt).sum,
-      ListMap[String, AnyVal](
+      Map[String, AnyVal](
         ("Empty" -> (xml \ "ReadTypeDist" \ "BinCounts" \ "BinCount")(0).text.toInt),
         ("FullHqRead0" -> (xml \ "ReadTypeDist" \ "BinCounts" \ "BinCount")(1).text.toInt),
         ("FullHqRead1" -> (xml \ "ReadTypeDist" \ "BinCounts" \ "BinCount")(2).text.toInt),
@@ -76,7 +76,7 @@ class Sts_v3_0_1 (val p: Path, val xml: Node) extends Metrics {
         ("PartialHqRead1" -> (xml \ "ReadTypeDist" \ "BinCounts" \ "BinCount")(4).text.toInt),
         ("PartialHqRead2" -> (xml \ "ReadTypeDist" \ "BinCounts" \ "BinCount")(5).text.toInt),
         ("Indeterminate" -> (xml \ "ReadTypeDist" \ "BinCounts" \ "BinCount")(6).text.toInt)
-      )),
+      ), List("Empty", "FullHqRead0", "FullHqRead1", "PartialHqRead0", "PartialHqRead1", "PartialHqRead2", "Indeterminate")),
     Str("PkMidCV: A", pkMidCVPerChannel(xml, "A")),
     Str("PkMidCV: C", pkMidCVPerChannel(xml, "C")),
     Str("PkMidCV: G", pkMidCVPerChannel(xml, "G")),
