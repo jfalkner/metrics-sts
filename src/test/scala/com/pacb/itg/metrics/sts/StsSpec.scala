@@ -20,7 +20,7 @@ class StsSpec extends Specification with TestData {
                      numBins: String, binWidth: String,
                      minOutlier: String, min: String, maxOutlier: String, max: String,
                      bins: Seq[Int]) : MatchResult[Any] = {
-    val d = sts.asStsDist(name).metrics
+    val d = sts.asStsDist(name).values
     d(0).asInstanceOf[Num].value mustEqual samples
     d(1).asInstanceOf[Num].value mustEqual mean
     d(2).asInstanceOf[Num].value mustEqual median
@@ -99,5 +99,22 @@ class StsSpec extends Specification with TestData {
     "BaselineStdDist T" in (stsDistMatches(
       "Baseline StdDev: T", "139099", "10.0892", "0.000127495", "17.8715", "47.9", "30", "2.11333", "0", "0", "63.4", "63.4",
       Seq(104089, 0, 0, 0, 0, 0, 0, 7, 63, 151, 372, 739, 1201, 1495, 1985, 2650, 2726, 2768, 2826, 2889, 3020, 3003, 3191, 2748, 1847, 890, 334, 82, 16, 6)))
+  }
+  "CSV serialization has Productivity" in {
+    val chunk = CSV(sts)
+    chunk.map("Productivity: Empty") mustEqual "879017"
+    chunk.map("Productivity: Productive") mustEqual "139099"
+    chunk.map("Productivity: Other") mustEqual "16101"
+    chunk.map("Productivity: Undefined") mustEqual "0"
+  }
+  "CSV serialization has Read Type" in {
+    val chunk = CSV(sts)
+    chunk.map("Read Type: Empty") mustEqual "879017"
+    chunk.map("Read Type: FullHqRead0") mustEqual "49419"
+    chunk.map("Read Type: FullHqRead1") mustEqual "8444"
+    chunk.map("Read Type: PartialHqRead0") mustEqual "65659"
+    chunk.map("Read Type: PartialHqRead1") mustEqual "11629"
+    chunk.map("Read Type: PartialHqRead2") mustEqual "3948"
+    chunk.map("Read Type: Indeterminate") mustEqual "16101"
   }
 }

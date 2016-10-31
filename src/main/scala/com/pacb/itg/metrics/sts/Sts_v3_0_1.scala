@@ -4,6 +4,7 @@ import java.nio.file.Path
 
 import falkner.jayson.metrics._
 
+import scala.collection.immutable.ListMap
 import scala.xml.{Elem, Node, XML}
 
 object Sts_v3_0_1 {
@@ -59,15 +60,15 @@ class Sts_v3_0_1 (val p: Path, val xml: Node) extends Metrics {
         (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (0).text.toInt +
         (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (2).text.toInt +
         (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (3).text.toInt),
-      Map(
+      ListMap(
         ("Empty" -> (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (0).text.toInt),
-        ("Productive" -> (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (0).text.toInt),
+        ("Productive" -> (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (1).text.toInt),
         ("Other" -> (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (2).text.toInt),
         ("Undefined" -> (xml \ "ProdDist" \ "BinCounts" \ "BinCount") (3).text.toInt)
       )),
     CatDist("Read Type",
       (xml \ "ReadTypeDist" \ "BinCounts" \ "BinCount").map(_.text.toInt).sum,
-      Map[String, AnyVal](
+      ListMap[String, AnyVal](
         ("Empty" -> (xml \ "ReadTypeDist" \ "BinCounts" \ "BinCount")(0).text.toInt),
         ("FullHqRead0" -> (xml \ "ReadTypeDist" \ "BinCounts" \ "BinCount")(1).text.toInt),
         ("FullHqRead1" -> (xml \ "ReadTypeDist" \ "BinCounts" \ "BinCount")(2).text.toInt),
@@ -101,8 +102,10 @@ class Sts_v3_0_1 (val p: Path, val xml: Node) extends Metrics {
 
   def baselineLevelSequencing(xml: Node, n: String): Node = (xml \ "BaselineLevelSequencingDist").filter(n => (n \ "@Channel").text == n).head
 
-  case class StsDist(name: String, node: (Node) => Node) extends Metric {
-    val metrics: List[Metric] = List(
+  case class StsDist(name: String, node: (Node) => Node) extends Metric with Metrics {
+    val namespace = Sts_v3_0_1.this.namespace
+    val version = Sts_v3_0_1.this.version
+    val values: List[Metric] = List(
       Num(s"$name: Samples", (node(xml) \ "SampleSize").text),
       Num(s"$name: Mean", (node(xml) \ "SampleMean").text),
       Num(s"$name: Median", (node(xml) \ "SampleMed").text),
