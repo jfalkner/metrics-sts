@@ -36,6 +36,7 @@ class StsSpec extends Specification with TestData {
   }
 
   "PipeStats checking" should {
+    // checks all loading entry points
     "Current version calculates without error" in {
       println(s"Current EOL QC Version: ${Sts.currentVersion}")
       Sts.currentVersion != null mustEqual true
@@ -43,8 +44,12 @@ class StsSpec extends Specification with TestData {
     "Support blank CSV generation" in {
       CSV(Sts.blank).all != null mustEqual true
     }
-    //"Load from sts.xml file" in (Sts(stsPath).pMovieName mustEqual pMovieName)
+    "Load latest from sts.xml" in (Sts(stsPath).asString("Movie Name") mustEqual pMovieName)
     "Load from movie directory" in (sts.asString("Movie Name") mustEqual pMovieName)
+    "Load fail must raise exception" in (Sts(Paths.get("wont_work")) must throwA(new Exception(s"Path wont_work must be a .sts.xml file that exists or directory with one in it.")) )
+    "Load version 0.02 from sts.xml" in (Sts_v0_02(stsPath).asString("Movie Name") mustEqual pMovieName)
+
+    // checks all extracted values
     "MovieLength" in (sts.asString("Movie Length") mustEqual "120")
     // BaselineLevelDist A
     "BaselineLevelDist.A" in (stsDistMatches(

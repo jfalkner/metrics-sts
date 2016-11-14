@@ -6,14 +6,14 @@ import scala.xml.{Elem, XML}
 
 object Sts {
 
-  val version = "0.0.1"
+  val version = "0.0.2"
 
   lazy val blank = new Sts(null, null)
 
   lazy val currentVersion = blank.version
 
   // placeholder to support other versions down the road
-  def apply(p: Path): Sts_v3_0_1 = {
+  def apply(p: Path): Sts_v0_02 = {
     Files.exists(p) match {
       case true => Files.isDirectory(p) match {
         case false => loadVersion(p)
@@ -24,9 +24,9 @@ object Sts {
   }
 
   // check what version exists and send it back
-  def loadVersion(p: Path): Sts_v3_0_1 = Sts_v3_0_1(p, XML.loadFile(p.toFile))
+  def loadVersion(p: Path): Sts_v0_02 = Sts_v0_02(p, XML.loadFile(p.toFile))
 }
 
 
 // current latest version
-class Sts(p: Path, xml: Elem) extends Sts_v3_0_1(p, xml)
+class Sts(p: Path, xml: Elem) extends Sts_v0_02(p, xml)

@@ -1,6 +1,6 @@
-import java.nio.file.Paths
+package com.pacb.itg.metrics.sts
 
-import com.pacb.itg.metrics.sts.Sts
+import java.nio.file.Paths
 import falkner.jayson.metrics.io.{CSV, JSON}
 
 /**
