@@ -56,10 +56,10 @@ class Sts_v0_02(val p: Path, val xml: Node) extends Metrics {
     ContinuousDist("HQ Region SNR: C", (root) => (root \ "HqRegionSnrDist").filter(n => (n \ "@Channel").text == "C").head),
     ContinuousDist("HQ Region SNR: G", (root) => (root \ "HqRegionSnrDist").filter(n => (n \ "@Channel").text == "G").head),
     ContinuousDist("HQ Region SNR: T", (root) => (root \ "HqRegionSnrDist").filter(n => (n \ "@Channel").text == "T").head),
-    ContinuousDist("Pk Mid: A", (root) => (root \ "HqBasPkMidDist").filter(n => (n \ "@Channel").text == "A").head),
-    ContinuousDist("Pk Mid: C", (root) => (root \ "HqBasPkMidDist").filter(n => (n \ "@Channel").text == "C").head),
-    ContinuousDist("Pk Mid: G", (root) => (root \ "HqBasPkMidDist").filter(n => (n \ "@Channel").text == "G").head),
-    ContinuousDist("Pk Mid: T", (root) => (root \ "HqBasPkMidDist").filter(n => (n \ "@Channel").text == "T").head),
+    ContinuousDist("HQ Pk Mid: A", (root) => (root \ "HqBasPkMidDist").filter(n => (n \ "@Channel").text == "A").head),
+    ContinuousDist("HQ Pk Mid: C", (root) => (root \ "HqBasPkMidDist").filter(n => (n \ "@Channel").text == "C").head),
+    ContinuousDist("HQ Pk Mid: G", (root) => (root \ "HqBasPkMidDist").filter(n => (n \ "@Channel").text == "G").head),
+    ContinuousDist("HQ Pk Mid: T", (root) => (root \ "HqBasPkMidDist").filter(n => (n \ "@Channel").text == "T").head),
     // 4.1.3 Outputs: "Per-ZMW metrics – 1 value per ZMW"
     ContinuousDist("Pausiness", (root) => (root \ "PausinessDist").head),
     ContinuousDist("Control Read Qual", (root) => (root \ "ControlReadQual").head),
@@ -136,18 +136,18 @@ class Sts_v0_02(val p: Path, val xml: Node) extends Metrics {
     val namespace = Sts_v0_02.this.namespace
     val version = Sts_v0_02.this.version
     val values: List[Metric] = List(
-      Num(s"$name: Samples", (node(xml) \ "SampleSize").text),
-      Num(s"$name: Mean", (node(xml) \ "SampleMean").text),
-      Num(s"$name: Median", (node(xml) \ "SampleMed").text),
-      Num(s"$name: StdDev", (node(xml) \ "SampleStd").text),
-      Num(s"$name: 95th Pct", (node(xml) \ "Sample95thPct").text),
-      Num(s"$name: Num Bins", (node(xml) \ "NumBins").text),
-      Num(s"$name: Bin Width", (node(xml) \ "BinWidth").text),
-      Num(s"$name: Min Outlier", (node(xml) \ "MinOutlierValue").text),
-      Num(s"$name: Min", (node(xml) \ "MinBinValue").text),
-      Num(s"$name: Max Outlier", (node(xml) \ "MaxOutlierValue").text),
-      Num(s"$name: Max", (node(xml) \ "MaxBinValue").text),
-      NumArray(s"$name: Bins", (node(xml) \ "BinCounts" \ "BinCount").map(_.text.toInt))
+      Num(s"Samples", (node(xml) \ "SampleSize").text),
+      Num(s"Mean", (node(xml) \ "SampleMean").text),
+      Num(s"Median", (node(xml) \ "SampleMed").text),
+      Num(s"StdDev", (node(xml) \ "SampleStd").text),
+      Num(s"95th Pct", (node(xml) \ "Sample95thPct").text),
+      Num(s"Num Bins", (node(xml) \ "NumBins").text),
+      Num(s"Bin Width", (node(xml) \ "BinWidth").text),
+      Num(s"Min Outlier", (node(xml) \ "MinOutlierValue").text),
+      Num(s"Min", (node(xml) \ "MinBinValue").text),
+      Num(s"Max Outlier", (node(xml) \ "MaxOutlierValue").text),
+      Num(s"Max", (node(xml) \ "MaxBinValue").text),
+      NumArray(s"Bins", (node(xml) \ "BinCounts" \ "BinCount").map(_.text.toInt))
     )
   }
 

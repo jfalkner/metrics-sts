@@ -10,7 +10,7 @@ import falkner.jayson.metrics.io.{CSV, JSON}
   */
 object Main extends App {
   if (args.last.endsWith("json"))
-    JSON.write(Paths.get(args.last), Sts(Paths.get(args.head)))
+    JSON(Paths.get(args.last), Sts(Paths.get(args.head)))
   else if (args.last.endsWith("csv"))
     CSV(Paths.get(args.last), Sts(Paths.get(args.head)))
 }
