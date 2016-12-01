@@ -31,7 +31,7 @@ libraryDependencies ++= Seq(
   "org.specs2" %% "specs2-core" % "3.8.5" % "test"
 )
 
-//lazy val metrics = RootProject(uri("https://github.com/jfalkner/metrics.git#0.2.0"))
-lazy val metrics = RootProject(file("/Users/jfalkner/tokeep/git/jfalkner/metrics"))
+lazy val metrics = RootProject(uri("https://github.com/jfalkner/metrics.git#0.2.1"))
+//lazy val metrics = RootProject(file("/Users/jfalkner/tokeep/git/jfalkner/metrics"))
 
 val main = Project(id = "itg_metrics_sts", base = file(".")).dependsOn(metrics)
