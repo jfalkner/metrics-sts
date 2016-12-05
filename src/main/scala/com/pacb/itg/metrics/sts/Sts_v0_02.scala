@@ -118,6 +118,10 @@ class Sts_v0_02(val p: Path, val xml: Node) extends Metrics {
     // Missing: BaselineLevelZmwFLTIDist
     // Missing: BaselineLevelScatteringMetrologyDist
 
+    // Goat (3.2) is when sts.xml started having Red (A,C) and Green (G,T) spectral angle data.
+    ContinuousDist("DmeAngleEstDist: AC", (root) => (root \ "DmeAngleEstDist").filter(n => (n \ "@Channel").text == "A").head),
+    ContinuousDist("DmeAngleEstDist: GT", (root) => (root \ "DmeAngleEstDist").filter(n => (n \ "@Channel").text == "G").head),
+
     // Bonus. Not currently in spec?
     Str("PkMidCV: A", pkMidCVPerChannel(xml, "A")), // not in spec?
     Str("PkMidCV: C", pkMidCVPerChannel(xml, "C")),
