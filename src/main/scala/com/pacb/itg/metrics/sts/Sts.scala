@@ -6,7 +6,7 @@ import scala.xml.{Elem, XML}
 
 object Sts {
 
-  val version = "0.0.2"
+  val version = "0.0.4"
 
   lazy val blank = new Sts(null, null)
 
