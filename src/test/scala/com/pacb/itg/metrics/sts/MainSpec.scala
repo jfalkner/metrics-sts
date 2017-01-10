@@ -1,5 +1,6 @@
 package com.pacb.itg.metrics.sts
 
+import java.io.ByteArrayOutputStream
 import java.nio.file.{Files, Path, Paths}
 
 import falkner.jayson.metrics.io.{CSV, JSON}
@@ -25,17 +26,21 @@ class MainSpec extends Specification with TestData {
   sequential
 
   "Main entry point" should {
-    "Export CSV without error" in {
-      withCleanup { (p) =>
-        Main.main(Array(stsPath.toAbsolutePath.toString, p.resolve("test.csv").toString))
-        1 mustEqual 1
-      }
-    }
     "Export JSON without error" in {
       withCleanup { (p) =>
-        Main.main(Array(stsPath.toAbsolutePath.toString, p.resolve("test.json").toString))
-        1 mustEqual 1
+        val buf = new ByteArrayOutputStream()
+        Console.withOut(buf) {
+          Main.main(Array(stsPath.toAbsolutePath.toString, p.resolve("test.json").toString))
+        }
+        buf.toString.trim mustEqual ""
       }
+    }
+    "Show usage if args are incorrect" in {
+      val buf = new ByteArrayOutputStream()
+      Console.withOut(buf) {
+        Main.main(Array())
+      }
+      buf.toString.trim mustEqual Main.usage
     }
   }
 

@@ -1,6 +1,6 @@
 name := "itg_metrics_sts"
 
-version in ThisBuild := "0.0.6"
+version in ThisBuild := "0.0.7"
 
 organization in ThisBuild := "com.pacb"
 

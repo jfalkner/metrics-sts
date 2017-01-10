@@ -69,5 +69,8 @@ class Sts_3_2_Goat_Spec extends Specification with TestData {
       "61.48", // MaxBinValue
       Seq(2, 0, 2, 8, 23, 55, 139, 239, 526, 872, 1580, 2346, 3121, 4032, 4661, 5206, 5293, 5115, 4354, 3804, 2966, 2169, 1449, 833, 416, 180, 69, 24, 4, 2)
     ))
+    "Spectral Angle is a calculated form of DME" in {
+      sts.asString("Spectral Angle") mustEqual (sts.asStsDist("DmeAngleEstDist: AC").values(1).asInstanceOf[Num].value.toDouble - sts.asStsDist("DmeAngleEstDist: GT").values(1).asInstanceOf[Num].value.toDouble).toString
+    }
   }
 }
